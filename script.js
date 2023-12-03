@@ -1,15 +1,22 @@
-const LENGTH = 1,
+const LENGTH = 4,
   ROUNDS = 2;
 const map = new Map();
 
+const bodyElement = document.body;
+const messageElement = document.querySelector('.message');
+const countElement = document.querySelector('.count');
+const roundElement = document.querySelector('.round');
+const inputElement = document.querySelector('input[type="number"]');
+const startButton = document.querySelector('.start');
+
 map.set('INHALE', {
-  length: LENGTH,
+  count: LENGTH,
   message: `Breathe in through the nose for ${LENGTH} seconds, feel the stomach pushing out`,
   color: 'green',
   speech: 'in'
 });
 map.set('HOLD', {
-  length: LENGTH * 4,
+  count: LENGTH * 4,
   message: `Hold for ${
     LENGTH * 4
   } seconds, feel the oxygen coursing through your body`,
@@ -17,7 +24,7 @@ map.set('HOLD', {
   speech: 'hold'
 });
 map.set('EXHALE', {
-  length: LENGTH * 2,
+  count: LENGTH * 2,
   message: `Exhale through the mouth for ${
     LENGTH * 2
   } seconds, relax the stomach`,
@@ -30,7 +37,7 @@ function speak(text, rate = 0.75, voiceIndex = 2) {
   const utterance = new SpeechSynthesisUtterance(text);
   utterance.rate = rate;
 
-  if (voices.length > voiceIndex) {
+  if (voices.count > voiceIndex) {
     utterance.voice = voices[voiceIndex];
   } else {
     console.warn('Selected voice index not available. Using default voice.');
@@ -43,6 +50,7 @@ async function start() {
   for (let i = 0; i < ROUNDS; i++) {
     console.log(`Round ${i + 1}`);
     speak(`Round ${i + 1}`);
+    roundElement.textContent = `${i + 1}`;
     for (const elem of map.values()) {
       await countDown(elem);
     }
@@ -51,18 +59,21 @@ async function start() {
   speak('congrats you rock');
 }
 
-async function countDown({ message, length, color, speech }) {
+async function countDown({ message, count, color, speech }) {
   console.log(message, color, speech);
+  bodyElement.style.backgroundColor = color;
+  messageElement.textContent = message;
   speak(speech);
 
   return new Promise(resolve => {
     const interval = setInterval(() => {
-      console.log(length--);
-      if (length === 0) {
+      countElement.textContent = count;
+      console.log(count--);
+      if (count === 0) {
         clearInterval(interval);
         resolve();
       }
-    }, 500);
+    }, 1000);
   });
 }
 
@@ -79,4 +90,6 @@ speechSynthesis.onvoiceschanged = listVoices;
 listVoices();
 
 // Start the process
-start();
+// start();
+
+startButton.addEventListener('click', start);
