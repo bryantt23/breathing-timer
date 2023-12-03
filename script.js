@@ -1,4 +1,46 @@
-alert('hiii');
+const LENGTH = 4,
+  ROUNDS = 1;
+const map = new Map();
+
+map.set('INHALE', {
+  length: LENGTH,
+  message: `Breathe in through the nose for ${length} seconds, feel the stomach pushing out`,
+  color: 'green'
+});
+map.set('HOLD', {
+  length: LENGTH * 4,
+  message: `Breathe in through the nose for ${length} seconds, feel the stomach pushing out`,
+  color: 'yellow'
+});
+map.set('EXHALE', {
+  length: LENGTH * 2,
+  message: `Breathe in through the nose for ${length} seconds, feel the stomach pushing out`,
+  color: 'red'
+});
+
+async function start() {
+  for (let i = 0; i < ROUNDS; i++) {
+    for (const elem of map.values()) {
+      await countDown(elem);
+    }
+  }
+}
+
+async function countDown({ message, length, color }) {
+  console.log(message);
+  return new Promise(resolve => {
+    const interval = setInterval(() => {
+      console.log(length--);
+      if (length === 0) {
+        clearInterval(interval);
+        resolve();
+      }
+    }, 500);
+  });
+}
+
+start();
+
 /*
 TODO
 
