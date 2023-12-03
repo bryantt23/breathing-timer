@@ -5,21 +5,24 @@ const map = new Map();
 map.set('INHALE', {
   length: LENGTH,
   message: `Breathe in through the nose for ${LENGTH} seconds, feel the stomach pushing out`,
-  color: 'green'
+  color: 'green',
+  speech: 'in'
 });
 map.set('HOLD', {
   length: LENGTH * 4,
   message: `Hold for ${
     LENGTH * 4
   } seconds, feel the oxygen coursing through your body`,
-  color: 'yellow'
+  color: 'yellow',
+  speech: 'hold'
 });
 map.set('EXHALE', {
   length: LENGTH * 2,
   message: `Exhale through the mouth for ${
     LENGTH * 2
   } seconds, relax the stomach`,
-  color: 'red'
+  color: 'red',
+  speech: 'out'
 });
 
 async function start() {
@@ -32,8 +35,8 @@ async function start() {
   console.log('congrats you rock');
 }
 
-async function countDown({ message, length, color }) {
-  console.log(message, color);
+async function countDown({ message, length, color, speech }) {
+  console.log(message, color, speech);
   return new Promise(resolve => {
     const interval = setInterval(() => {
       console.log(length--);
