@@ -35,8 +35,45 @@ async function start() {
   console.log('congrats you rock');
 }
 
+function listVoices() {
+  const voices = speechSynthesis.getVoices();
+  voices.forEach((voice, index) => {
+    console.log(`${index + 1}: ${voice.name} (${voice.lang})`);
+  });
+}
+
+// It's a good idea to call this function after the 'voiceschanged' event,
+// to ensure all voices are loaded, especially in some browsers.
+speechSynthesis.onvoiceschanged = listVoices;
+listVoices();
+
 async function countDown({ message, length, color, speech }) {
   console.log(message, color, speech);
+  //say the speech using some voice api
+  // Convert the speech text to spoken words
+  const voices = speechSynthesis.getVoices();
+  const utterance = new SpeechSynthesisUtterance(speech);
+  utterance.rate = 0.75;
+
+  // Optional: Set properties like voice, pitch, rate, volume etc.
+  // utterance.voice = ...; // Select a voice from the available voices
+  // utterance.pitch = 1; // Default is 1
+  // utterance.rate = 1; // Default is 1
+  // utterance.volume = 1; // Default is 1 (max)
+
+  //   speechSynthesis.speak(utterance);
+
+  //   if (voices.length === 0) {
+  //     speechSynthesis.onvoiceschanged = () => {
+  //       const voices = speechSynthesis.getVoices();
+  //       utterance.voice = voices[2]; // Make sure this index exists
+  //       speechSynthesis.speak(utterance);
+  //     };
+  //   } else {
+  utterance.voice = voices[2]; // Make sure this index exists
+  speechSynthesis.speak(utterance);
+  //   }
+
   return new Promise(resolve => {
     const interval = setInterval(() => {
       console.log(length--);
@@ -47,8 +84,8 @@ async function countDown({ message, length, color, speech }) {
     }, 500);
   });
 }
-
 start();
+// setTimeout(start, 1000);
 
 /*
 TODO
