@@ -1,5 +1,4 @@
-const ROUNDS = 1;
-
+const ROUNDS = 10;
 const bodyElement = document.body;
 const messageElement = document.querySelector('.message');
 const countElement = document.querySelector('.count');
@@ -7,27 +6,19 @@ const roundElement = document.querySelector('.round');
 const inputElement = document.querySelector('input[type="number"]');
 const startButton = document.querySelector('.start');
 const breathLengthInput = document.querySelector('.breath-length');
+
 let voices;
 
 function speak(text, rate = 0.75, voiceIndex = 2) {
   const utterance = new SpeechSynthesisUtterance(text);
   utterance.rate = rate;
-  //   utterance.voice
-  console.log('🚀 ~ file: script.js:17 ~ speak ~ voices:', voices);
-
-  //   if (voices.count > voiceIndex) {
   utterance.voice = voices[voiceIndex];
-  //   } else {
-  //     console.warn('Selected voice index not available. Using default voice.');
-  //   }
-
   speechSynthesis.speak(utterance);
 }
 
 async function start() {
   const map = new Map();
   const length = Number(breathLengthInput.value);
-  console.log('🚀 ~ file: script.js:27 ~ start ~ length:', length);
   map.set('INHALE', {
     count: length,
     message: `Breathe in through the nose for ${length} seconds, feel the stomach pushing out`,
@@ -59,12 +50,12 @@ async function start() {
       await countDown(elem);
     }
   }
-  console.log('congrats you rock');
-  speak('congrats you rock');
+  console.log('Congrats you rock!');
+  speak('Congrats you rock!');
+  messageElement.textContent = 'Congrats you rock!';
 }
 
 async function countDown({ message, count, color, speech }) {
-  console.log(message, color, speech);
   bodyElement.style.backgroundColor = color;
   messageElement.textContent = message;
   speak(speech);
