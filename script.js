@@ -1,4 +1,4 @@
-const ROUNDS = 10;
+const ROUNDS = 1;
 
 const bodyElement = document.body;
 const messageElement = document.querySelector('.message');
@@ -7,17 +7,19 @@ const roundElement = document.querySelector('.round');
 const inputElement = document.querySelector('input[type="number"]');
 const startButton = document.querySelector('.start');
 const breathLengthInput = document.querySelector('.breath-length');
+let voices;
 
 function speak(text, rate = 0.75, voiceIndex = 2) {
-  const voices = speechSynthesis.getVoices();
   const utterance = new SpeechSynthesisUtterance(text);
   utterance.rate = rate;
+  //   utterance.voice
+  console.log('🚀 ~ file: script.js:17 ~ speak ~ voices:', voices);
 
-  if (voices.count > voiceIndex) {
-    utterance.voice = voices[voiceIndex];
-  } else {
-    console.warn('Selected voice index not available. Using default voice.');
-  }
+  //   if (voices.count > voiceIndex) {
+  utterance.voice = voices[voiceIndex];
+  //   } else {
+  //     console.warn('Selected voice index not available. Using default voice.');
+  //   }
 
   speechSynthesis.speak(utterance);
 }
@@ -80,7 +82,7 @@ async function countDown({ message, count, color, speech }) {
 }
 
 function listVoices() {
-  const voices = speechSynthesis.getVoices();
+  voices = speechSynthesis.getVoices();
   voices.forEach((voice, index) => {
     console.log(`${index + 1}: ${voice.name} (${voice.lang})`);
   });
