@@ -16,7 +16,24 @@ function speak(text, rate = 0.75, voiceIndex = 2) {
   speechSynthesis.speak(utterance);
 }
 
+function toggleInputs(disabled) {
+  const breathLengthInput = document.querySelector('.breath-length');
+  const startButton = document.querySelector('.start');
+
+  breathLengthInput.disabled = disabled;
+  startButton.disabled = disabled;
+
+  if (disabled) {
+    startButton.classList.add('disabled');
+    breathLengthInput.classList.add('disabled');
+  } else {
+    startButton.classList.remove('disabled');
+    breathLengthInput.classList.remove('disabled');
+  }
+}
+
 async function start() {
+  toggleInputs(true);
   const map = new Map();
   const length = Number(breathLengthInput.value);
   map.set('INHALE', {
@@ -53,6 +70,7 @@ async function start() {
   console.log('Congrats you rock!');
   speak('Congrats you rock!');
   messageElement.textContent = 'Congrats you rock!';
+  toggleInputs(false);
 }
 
 async function countDown({ message, count, color, speech }) {
