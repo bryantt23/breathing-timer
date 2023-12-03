@@ -1,4 +1,4 @@
-const LENGTH = 4,
+const LENGTH = 2,
   ROUNDS = 2;
 const map = new Map();
 
@@ -69,7 +69,7 @@ async function countDown({ message, count, color, speech }) {
     const interval = setInterval(() => {
       countElement.textContent = count;
       console.log(count--);
-      if (count === 0) {
+      if (count < 0) {
         clearInterval(interval);
         resolve();
       }
