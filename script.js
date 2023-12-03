@@ -50,7 +50,7 @@ async function start() {
   for (let i = 0; i < ROUNDS; i++) {
     console.log(`Round ${i + 1}`);
     speak(`Round ${i + 1}`);
-    roundElement.textContent = `${i + 1}`;
+    roundElement.textContent = `Round ${i + 1}`;
     for (const elem of map.values()) {
       await countDown(elem);
     }
