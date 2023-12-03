@@ -1,33 +1,39 @@
-const LENGTH = 4,
-  ROUNDS = 1;
+const LENGTH = 1,
+  ROUNDS = 2;
 const map = new Map();
 
 map.set('INHALE', {
   length: LENGTH,
-  message: `Breathe in through the nose for ${length} seconds, feel the stomach pushing out`,
+  message: `Breathe in through the nose for ${LENGTH} seconds, feel the stomach pushing out`,
   color: 'green'
 });
 map.set('HOLD', {
   length: LENGTH * 4,
-  message: `Breathe in through the nose for ${length} seconds, feel the stomach pushing out`,
+  message: `Hold for ${
+    LENGTH * 4
+  } seconds, feel the oxygen coursing through your body`,
   color: 'yellow'
 });
 map.set('EXHALE', {
   length: LENGTH * 2,
-  message: `Breathe in through the nose for ${length} seconds, feel the stomach pushing out`,
+  message: `Exhale through the mouth for ${
+    LENGTH * 2
+  } seconds, relax the stomach`,
   color: 'red'
 });
 
 async function start() {
   for (let i = 0; i < ROUNDS; i++) {
+    console.log(`Round ${i + 1}`);
     for (const elem of map.values()) {
       await countDown(elem);
     }
   }
+  console.log('congrats you rock');
 }
 
 async function countDown({ message, length, color }) {
-  console.log(message);
+  console.log(message, color);
   return new Promise(resolve => {
     const interval = setInterval(() => {
       console.log(length--);
