@@ -2,6 +2,11 @@ const LENGTH = 1,
   ROUNDS = 2;
 const map = new Map();
 
+const voices = speechSynthesis.getVoices();
+const utterance = new SpeechSynthesisUtterance();
+utterance.rate = 0.75;
+utterance.voice = voices[2];
+
 map.set('INHALE', {
   length: LENGTH,
   message: `Breathe in through the nose for ${LENGTH} seconds, feel the stomach pushing out`,
@@ -28,6 +33,8 @@ map.set('EXHALE', {
 async function start() {
   for (let i = 0; i < ROUNDS; i++) {
     console.log(`Round ${i + 1}`);
+    const utterance = new SpeechSynthesisUtterance(`Round ${i + 1}`);
+    speechSynthesis.speak(utterance);
     for (const elem of map.values()) {
       await countDown(elem);
     }
