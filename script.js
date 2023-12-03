@@ -1,6 +1,4 @@
-const LENGTH = 2,
-  ROUNDS = 2;
-const map = new Map();
+const ROUNDS = 10;
 
 const bodyElement = document.body;
 const messageElement = document.querySelector('.message');
@@ -8,29 +6,7 @@ const countElement = document.querySelector('.count');
 const roundElement = document.querySelector('.round');
 const inputElement = document.querySelector('input[type="number"]');
 const startButton = document.querySelector('.start');
-
-map.set('INHALE', {
-  count: LENGTH,
-  message: `Breathe in through the nose for ${LENGTH} seconds, feel the stomach pushing out`,
-  color: 'green',
-  speech: 'in'
-});
-map.set('HOLD', {
-  count: LENGTH * 4,
-  message: `Hold for ${
-    LENGTH * 4
-  } seconds, feel the oxygen coursing through your body`,
-  color: 'yellow',
-  speech: 'hold'
-});
-map.set('EXHALE', {
-  count: LENGTH * 2,
-  message: `Exhale through the mouth for ${
-    LENGTH * 2
-  } seconds, relax the stomach`,
-  color: 'red',
-  speech: 'out'
-});
+const breathLengthInput = document.querySelector('.breath-length');
 
 function speak(text, rate = 0.75, voiceIndex = 2) {
   const voices = speechSynthesis.getVoices();
@@ -47,6 +23,32 @@ function speak(text, rate = 0.75, voiceIndex = 2) {
 }
 
 async function start() {
+  const map = new Map();
+  const length = Number(breathLengthInput.value);
+  console.log('🚀 ~ file: script.js:27 ~ start ~ length:', length);
+  map.set('INHALE', {
+    count: length,
+    message: `Breathe in through the nose for ${length} seconds, feel the stomach pushing out`,
+    color: 'green',
+    speech: 'in'
+  });
+  map.set('HOLD', {
+    count: length * 4,
+    message: `Hold for ${
+      length * 4
+    } seconds, feel the oxygen coursing through your body`,
+    color: 'yellow',
+    speech: 'hold'
+  });
+  map.set('EXHALE', {
+    count: length * 2,
+    message: `Exhale through the mouth for ${
+      length * 2
+    } seconds, relax the stomach`,
+    color: 'red',
+    speech: 'out'
+  });
+
   for (let i = 0; i < ROUNDS; i++) {
     console.log(`Round ${i + 1}`);
     speak(`Round ${i + 1}`);
