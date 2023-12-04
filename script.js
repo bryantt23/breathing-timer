@@ -11,10 +11,15 @@ document.addEventListener('DOMContentLoaded', () => {
   const storedBreathLength = localStorage.getItem('breath-length');
   if (storedBreathLength) {
     breathLengthInput.value = storedBreathLength;
+    countElement.textContent = storedBreathLength;
+    messageElement.textContent = `Breathe in through the nose for ${storedBreathLength} seconds, feel the stomach pushing out`;
   }
 
-  breathLengthInput.add('input', () => {
+  breathLengthInput.addEventListener('input', () => {
     localStorage.setItem('breath-length', breathLengthInput.value);
+    messageElement.textContent = breathLengthInput.value;
+    countElement.textContent = breathLengthInput.value;
+    messageElement.textContent = `Breathe in through the nose for ${breathLengthInput.value} seconds, feel the stomach pushing out`;
   });
 });
 
