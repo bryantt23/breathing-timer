@@ -7,6 +7,17 @@ const inputElement = document.querySelector('input[type="number"]');
 const startButton = document.querySelector('.start');
 const breathLengthInput = document.querySelector('.breath-length');
 
+document.addEventListener('DOMContentLoaded', () => {
+  const storedBreathLength = localStorage.getItem('breath-length');
+  if (storedBreathLength) {
+    breathLengthInput.value = storedBreathLength;
+  }
+
+  breathLengthInput.add('input', () => {
+    localStorage.setItem('breath-length', breathLengthInput.value);
+  });
+});
+
 let voices;
 
 function speak(text, rate = 0.75, voiceIndex = 2) {
