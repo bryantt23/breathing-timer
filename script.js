@@ -99,12 +99,12 @@ async function countDown({ message, count, color, speech }) {
   return new Promise(resolve => {
     const interval = setInterval(() => {
       countElement.textContent = (remainingTime/1000).toFixed(1);
-      remainingTime-=500
+      remainingTime-=100
       if (remainingTime < 0) {
         clearInterval(interval);
         resolve();
       }
-    }, 500);
+    }, 100);
   });
 }
 
