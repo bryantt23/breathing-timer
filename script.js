@@ -94,15 +94,17 @@ async function countDown({ message, count, color, speech }) {
   messageElement.textContent = message;
   speak(speech);
 
+  let remainingTime=count*1000;
+
   return new Promise(resolve => {
     const interval = setInterval(() => {
-      countElement.textContent = count;
-      console.log(count--);
-      if (count < 0) {
+      countElement.textContent = (remainingTime/1000).toFixed(1);
+      remainingTime-=500
+      if (remainingTime < 0) {
         clearInterval(interval);
         resolve();
       }
-    }, 1000);
+    }, 500);
   });
 }
 
