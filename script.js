@@ -18,6 +18,7 @@ const startButton = document.querySelector('.start');
 const pauseButton = document.querySelector('.pause');
 const breathLengthInput = document.querySelector('.breath-length');
 let map
+let interval
 
 document.addEventListener('DOMContentLoaded', () => {
   const storedBreathLength = localStorage.getItem('breath-length');
@@ -100,6 +101,13 @@ async function dispatch(nextState) {
       break;
     case states.PAUSED:
       console.log('Pausing timer')
+      if (interval) {
+        clearInterval(interval)
+        const { message, count, color, speech } = map.values().next().value
+        bodyElement.style.backgroundColor = color;
+        messageElement.textContent = message;
+
+      }
       break;
     case states.COMPLETED:
       console.log('Congrats you rock!');
@@ -145,7 +153,7 @@ async function countDownBreathPart(mapValues, pos, currentRound) {
 
   let remainingTime = count * 1000;
 
-  const interval = setInterval(() => {
+  interval = setInterval(() => {
     countElement.textContent = (remainingTime / 1000).toFixed(1);
     remainingTime -= 100
     if (remainingTime < 0) {
