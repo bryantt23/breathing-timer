@@ -1,11 +1,23 @@
-const ROUNDS = 2;
+const states = {
+  IDLE: 'IDLE',
+  RUNNING: 'RUNNING',
+  PAUSED: 'PAUSED',
+  COMPLETED: 'COMPLETED'
+}
+
+let currentState = states.IDLE
+
+const TOTAL_ROUNDS = 3;
+let currentRound = 1
 const bodyElement = document.body;
 const messageElement = document.querySelector('.message');
 const countElement = document.querySelector('.count');
 const roundElement = document.querySelector('.round');
 const inputElement = document.querySelector('input[type="number"]');
 const startButton = document.querySelector('.start');
+const pauseButton = document.querySelector('.pause');
 const breathLengthInput = document.querySelector('.breath-length');
+let map
 
 document.addEventListener('DOMContentLoaded', () => {
   const storedBreathLength = localStorage.getItem('breath-length');
@@ -50,7 +62,7 @@ function toggleInputs(disabled) {
 
 async function start() {
   toggleInputs(true);
-  const map = new Map();
+  map = new Map();
   const length = Number(breathLengthInput.value);
   map.set('INHALE', {
     count: length,
@@ -73,45 +85,81 @@ async function start() {
     speech: 'out'
   });
 
-  await startBreathingExercise(map)
-
-  console.log('Congrats you rock!');
-  speak('Congrats you rock!');
-  messageElement.textContent = 'Congrats you rock!';
-  toggleInputs(false);
+  dispatch(states.RUNNING)
 }
 
-function startBreathingExercise(map) {
-  return new Promise(async resolve => {
-    for (let i = 0; i < ROUNDS; i++) {
-      console.log(`Round ${i + 1}`);
-      speak(`Round ${i + 1}`);
-      roundElement.textContent = `Round ${i + 1}`;
-      for (const elem of map.values()) {
-        await countDown(elem);
-      }
-    }
-    resolve()
-  })
+function pause() {
+  dispatch(states.PAUSED)
 }
 
-async function countDown({ message, count, color, speech }) {
+async function dispatch(nextState) {
+  currentState = nextState
+  switch (nextState) {
+    case states.RUNNING:
+      startCountdownRound(currentRound)
+      break;
+    case states.PAUSED:
+      console.log('Pausing timer')
+      break;
+    case states.COMPLETED:
+      console.log('Congrats you rock!');
+      speak('Congrats you rock!');
+      messageElement.textContent = 'Congrats you rock!';
+      toggleInputs(false);
+      break
+    default:
+
+  }
+}
+
+function startCountdownRound(currentRound) {
+  //base case
+  if (currentRound === TOTAL_ROUNDS) {
+    dispatch(states.COMPLETED)
+    return
+  }
+
+  console.log(`Round ${currentRound}`);
+  speak(`Round ${currentRound}`);
+  roundElement.textContent = `Round ${currentRound}`;
+  countDown(currentRound)
+
+}
+
+function countDown(currentRound) {
+  countDownBreathPart(Array.from(map.values()), 0, currentRound);
+}
+
+
+async function countDownBreathPart(mapValues, pos, currentRound) {
+  // base case
+  if (currentRound === TOTAL_ROUNDS) {
+    dispatch(states.COMPLETED)
+    return;
+  }
+
+  const { message, count, color, speech } = mapValues[pos]
   bodyElement.style.backgroundColor = color;
   messageElement.textContent = message;
   speak(speech);
 
   let remainingTime = count * 1000;
 
-  return new Promise(resolve => {
-    const interval = setInterval(() => {
-      countElement.textContent = (remainingTime / 1000).toFixed(1);
-      remainingTime -= 100
-      if (remainingTime < 0) {
-        clearInterval(interval);
-        resolve();
+  const interval = setInterval(() => {
+    countElement.textContent = (remainingTime / 1000).toFixed(1);
+    remainingTime -= 100
+    if (remainingTime < 0) {
+      clearInterval(interval);
+      pos = (pos + 1) % mapValues.length
+      if (pos === 0) {
+        currentRound++
+        startCountdownRound(currentRound)
       }
-    }, 100);
-  });
+      else {
+        countDownBreathPart(mapValues, pos, currentRound)
+      }
+    }
+  }, 100);
 }
 
 function listVoices() {
@@ -130,3 +178,4 @@ listVoices();
 // start();
 
 startButton.addEventListener('click', start);
+pauseButton.addEventListener('click', pause);
