@@ -1,4 +1,4 @@
-const ROUNDS = 10;
+const ROUNDS = 2;
 const bodyElement = document.body;
 const messageElement = document.querySelector('.message');
 const countElement = document.querySelector('.count');
@@ -60,33 +60,39 @@ async function start() {
   });
   map.set('HOLD', {
     count: length * 4,
-    message: `Hold for ${
-      length * 4
-    } seconds, feel the oxygen coursing through your body`,
+    message: `Hold for ${length * 4
+      } seconds, feel the oxygen coursing through your body`,
     color: 'yellow',
     speech: 'hold'
   });
   map.set('EXHALE', {
     count: length * 2,
-    message: `Exhale through the mouth for ${
-      length * 2
-    } seconds, relax the stomach`,
+    message: `Exhale through the mouth for ${length * 2
+      } seconds, relax the stomach`,
     color: 'red',
     speech: 'out'
   });
 
-  for (let i = 0; i < ROUNDS; i++) {
-    console.log(`Round ${i + 1}`);
-    speak(`Round ${i + 1}`);
-    roundElement.textContent = `Round ${i + 1}`;
-    for (const elem of map.values()) {
-      await countDown(elem);
-    }
-  }
+  await startBreathingExercise(map)
+
   console.log('Congrats you rock!');
   speak('Congrats you rock!');
   messageElement.textContent = 'Congrats you rock!';
   toggleInputs(false);
+}
+
+function startBreathingExercise(map) {
+  return new Promise(async resolve => {
+    for (let i = 0; i < ROUNDS; i++) {
+      console.log(`Round ${i + 1}`);
+      speak(`Round ${i + 1}`);
+      roundElement.textContent = `Round ${i + 1}`;
+      for (const elem of map.values()) {
+        await countDown(elem);
+      }
+    }
+    resolve()
+  })
 }
 
 async function countDown({ message, count, color, speech }) {
@@ -94,12 +100,12 @@ async function countDown({ message, count, color, speech }) {
   messageElement.textContent = message;
   speak(speech);
 
-  let remainingTime=count*1000;
+  let remainingTime = count * 1000;
 
   return new Promise(resolve => {
     const interval = setInterval(() => {
-      countElement.textContent = (remainingTime/1000).toFixed(1);
-      remainingTime-=100
+      countElement.textContent = (remainingTime / 1000).toFixed(1);
+      remainingTime -= 100
       if (remainingTime < 0) {
         clearInterval(interval);
         resolve();
@@ -111,7 +117,7 @@ async function countDown({ message, count, color, speech }) {
 function listVoices() {
   voices = speechSynthesis.getVoices();
   voices.forEach((voice, index) => {
-    console.log(`${index + 1}: ${voice.name} (${voice.lang})`);
+    // console.log(`${index + 1}: ${voice.name} (${voice.lang})`);
   });
 }
 
