@@ -3,6 +3,13 @@ import './BreathingTimer.css'
 import { useSpeechSynthesis } from 'react-speech-kit'
 
 const ROUNDS = 3;
+const states = {
+    IDLE: 'IDLE',
+    INHALE: 'INHALE',
+    HOLD: 'HOLD',
+    EXHALE: 'EXHALE',
+    COMPLETED: 'COMPLETED',
+}
 
 function BreathingTimer() {
     const [breathLength, setBreathLength] = useState(localStorage.getItem("breath-length") || 5)
@@ -10,9 +17,12 @@ function BreathingTimer() {
         return breathLength ? `Breathe in through the nose for ${breathLength} seconds, feel the stomach pushing out` : ""
     })
     const [disabled, setDisabled] = useState(false)
-    const [round, setRound] = useState(1)
+    const [round, setRound] = useState(0)
     const [backgroundColor, setBackgroundColor] = useState('red')
     const [count, setCount] = useState(breathLength)
+    const [currentState, setCurrentState] = useState(states.IDLE)
+    const [breathMap, setBreathMap] = useState()
+
     const { speak, voices } = useSpeechSynthesis()
 
     useEffect(() => {
@@ -20,6 +30,40 @@ function BreathingTimer() {
         setMessage(`Breathe in through the nose for ${breathLength} seconds, feel the stomach pushing out`)
     }, [breathLength])
 
+    useEffect(() => {
+        if (round === 0) {
+            return
+        }
+        if (round === ROUNDS) {
+            setCurrentState(states.COMPLETED)
+            return;
+        }
+        console.log(`Round ${round}`);
+        handleSpeak(`Round ${round}`);
+        setCurrentState(() => states.INHALE)
+    }, [round])
+
+    useEffect(() => {
+        switch (currentState) {
+            case states.IDLE:
+                break;
+            case states.INHALE:
+            case states.HOLD:
+            case states.EXHALE:
+                countDown()
+                break;
+            case states.COMPLETED:
+                console.log('Congrats you rock!');
+                handleSpeak('Congrats you rock!');
+                setMessage('Congrats you rock!');
+                setDisabled(false)
+                break;
+
+            default:
+                break;
+        }
+    }, [currentState]
+    )
 
     function handleSpeak(text, rate = 0.75, voiceIndex = 2) {
         speak({
@@ -33,58 +77,58 @@ function BreathingTimer() {
         setDisabled(true);
         const length = Number(breathLength);
         const map = new Map();
-        map.set('INHALE', {
+        map.set(states.INHALE, {
             count: length,
             message: `Breathe in through the nose for ${length} seconds, feel the stomach pushing out`,
             color: 'green',
             speech: 'in'
         });
-        map.set('HOLD', {
+        map.set(states.HOLD, {
             count: length * 4,
             message: `Hold for ${length * 4
                 } seconds, feel the oxygen coursing through your body`,
             color: 'yellow',
             speech: 'hold'
         });
-        map.set('EXHALE', {
+        map.set(states.EXHALE, {
             count: length * 2,
             message: `Exhale through the mouth for ${length * 2
                 } seconds, relax the stomach`,
             color: 'red',
             speech: 'out'
         });
-
-        for (let i = 0; i < ROUNDS; i++) {
-            console.log(`Round ${i + 1}`);
-            handleSpeak(`Round ${i + 1}`);
-            setRound(i + 1);
-            for (const elem of map.values()) {
-                await countDown(elem);
-            }
-        }
-        console.log('Congrats you rock!');
-        handleSpeak('Congrats you rock!');
-        setMessage('Congrats you rock!');
-        setDisabled(false)
+        setBreathMap(map)
+        setRound(1)
     }
 
-    async function countDown({ message, count, color, speech }) {
+    function countDown() {
+        console.log("🚀 ~ BreathingTimer ~ breathMap:", breathMap)
+        console.log(breathMap.get(currentState))
+        // debugger
+        const { message, count, color, speech } = breathMap.get(currentState)
         setBackgroundColor(color)
         setMessage(message)
         handleSpeak(speech);
 
         let remainingTime = count * 1000;
 
-        return new Promise(resolve => {
-            const interval = setInterval(() => {
-                setCount((remainingTime / 1000).toFixed(1))
-                remainingTime -= 100
-                if (remainingTime < 0) {
-                    clearInterval(interval);
-                    resolve();
+        const interval = setInterval(() => {
+            setCount((remainingTime / 1000).toFixed(1))
+            remainingTime -= 100
+            if (remainingTime < 0) {
+                clearInterval(interval);
+
+                if (currentState === states.INHALE) {
+                    setCurrentState(() => states.HOLD)
                 }
-            }, 100);
-        });
+                else if (currentState === states.HOLD) {
+                    setCurrentState(() => states.EXHALE)
+                }
+                else {
+                    setRound(prev => prev + 1)
+                }
+            }
+        }, 100);
     }
 
     return (
