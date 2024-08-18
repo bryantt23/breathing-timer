@@ -97,7 +97,7 @@ function BreathingTimer() {
     }
 
     return (
-        <div style={{ backgroundColor }}>
+        <div style={{ backgroundColor }} className='container'>
             <h1 className="message">
                 {message}
             </h1>

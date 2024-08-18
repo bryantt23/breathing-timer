@@ -1,14 +1,20 @@
 /* Set the background color for the entire page */
 body {
-  background-color: red;
   font-family: cursive;
-  padding: 20px;
+  padding: 0;
+  margin: 0;
+}
+
+.container {
+  height: 100vh;
+  padding: 8px;
 }
 
 /* Style for the message text */
 .message {
   font-size: 2rem; /* Example size, adjust as needed */
   margin: 0.5rem;
+  margin-top: 0;
 }
 
 /* Style for the count number */
