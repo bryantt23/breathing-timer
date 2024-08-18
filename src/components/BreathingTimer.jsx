@@ -1,26 +1,8 @@
 import React, { useState, useEffect } from 'react'
 import './BreathingTimer.css'
+import { useSpeechSynthesis } from 'react-speech-kit'
 
 const ROUNDS = 3;
-let voices;
-function speak(text, rate = 0.75, voiceIndex = 2) {
-    const utterance = new SpeechSynthesisUtterance(text);
-    utterance.rate = rate;
-    utterance.voice = voices[voiceIndex];
-    speechSynthesis.speak(utterance);
-}
-
-function listVoices() {
-    voices = speechSynthesis.getVoices();
-    voices.forEach((voice, index) => {
-        console.log(`${index + 1}: ${voice.name} (${voice.lang})`);
-    });
-}
-
-// It's a good idea to call this function after the 'voiceschanged' event,
-// to ensure all voices are loaded, especially in some browsers.
-speechSynthesis.onvoiceschanged = listVoices;
-listVoices();
 
 function BreathingTimer() {
     const [breathLength, setBreathLength] = useState(localStorage.getItem("breath-length") || 5)
@@ -31,11 +13,26 @@ function BreathingTimer() {
     const [round, setRound] = useState(1)
     const [backgroundColor, setBackgroundColor] = useState('red')
     const [count, setCount] = useState(localStorage.getItem("breath-length") || 5)
+    const { speak, voices } = useSpeechSynthesis()
 
     useEffect(() => {
         localStorage.setItem("breath-length", breathLength)
         setMessage(`Breathe in through the nose for ${breathLength} seconds, feel the stomach pushing out`)
     }, [breathLength])
+
+
+    function handleSpeak(text, rate = 0.75, voiceIndex = 2) {
+        // const utterance = new SpeechSynthesisUtterance(text);
+        // utterance.rate = rate;
+        // utterance.voice = voices[voiceIndex];
+        // speechSynthesis.speak(utterance);
+        speak({
+            text,
+            rate,
+            voice: voices[voiceIndex]
+        })
+    }
+
 
     async function start() {
         setDisabled(true);
@@ -64,23 +61,22 @@ function BreathingTimer() {
 
         for (let i = 0; i < ROUNDS; i++) {
             console.log(`Round ${i + 1}`);
-            speak(`Round ${i + 1}`);
+            handleSpeak(`Round ${i + 1}`);
             setRound(i + 1);
             for (const elem of map.values()) {
                 await countDown(elem);
             }
         }
         console.log('Congrats you rock!');
-        speak('Congrats you rock!');
+        handleSpeak('Congrats you rock!');
         setMessage('Congrats you rock!');
         setDisabled(false)
     }
 
-
     async function countDown({ message, count, color, speech }) {
         setBackgroundColor(color)
         setMessage(message)
-        speak(speech);
+        handleSpeak(speech);
 
         let remainingTime = count * 1000;
 
