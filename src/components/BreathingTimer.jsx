@@ -12,7 +12,7 @@ function BreathingTimer() {
     const [disabled, setDisabled] = useState(false)
     const [round, setRound] = useState(1)
     const [backgroundColor, setBackgroundColor] = useState('red')
-    const [count, setCount] = useState(localStorage.getItem("breath-length") || 5)
+    const [count, setCount] = useState(breathLength)
     const { speak, voices } = useSpeechSynthesis()
 
     useEffect(() => {
@@ -22,10 +22,6 @@ function BreathingTimer() {
 
 
     function handleSpeak(text, rate = 0.75, voiceIndex = 2) {
-        // const utterance = new SpeechSynthesisUtterance(text);
-        // utterance.rate = rate;
-        // utterance.voice = voices[voiceIndex];
-        // speechSynthesis.speak(utterance);
         speak({
             text,
             rate,
@@ -33,11 +29,10 @@ function BreathingTimer() {
         })
     }
 
-
     async function start() {
         setDisabled(true);
-        const map = new Map();
         const length = Number(breathLength);
+        const map = new Map();
         map.set('INHALE', {
             count: length,
             message: `Breathe in through the nose for ${length} seconds, feel the stomach pushing out`,
