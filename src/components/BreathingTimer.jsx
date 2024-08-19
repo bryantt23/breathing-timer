@@ -176,7 +176,7 @@ function BreathingTimer() {
                 disabled={disabled}
                 onClick={start}
             >Start</button>
-            <button className="start"
+            <button className="pause"
                 disabled={!disabled}
                 onClick={pause}
             >Pause</button>

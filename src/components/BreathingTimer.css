@@ -72,3 +72,27 @@ body {
   cursor: not-allowed;
   pointer-events: none;
 }
+
+.pause {
+  font-size: 1.5rem;
+  padding: 10px 20px;
+  margin: 0.5rem;
+  border-radius: 8px;
+  background-color: #f9d342; /* Bright yellow background */
+  color: #4a4a4a; /* Dark text color for contrast */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Shadow for depth */
+  transition: background-color 0.3s ease, color 0.3s ease, opacity 0.3s ease;
+}
+
+.pause:hover {
+  background-color: #e6c233; /* Darker yellow on hover */
+}
+
+.pause.disabled {
+  background-color: #bfbfbf; /* Much more muted gray */
+  color: #6f6f6f; /* Even dimmer text color */
+  cursor: not-allowed;
+  pointer-events: none;
+  box-shadow: none; /* Remove the shadow for a flat appearance */
+  opacity: 0.5; /* Lower opacity to emphasize the disabled state */
+}
