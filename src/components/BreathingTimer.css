@@ -1,12 +1,28 @@
-/* Set the background color for the entire page */
+/* 
+html, body, and #root full height: Setting height: 100% on these elements ensures that the entire page height is used.
+Flexbox on #root: Applying display: flex and flex-direction: column to #root ensures it acts as a flex container that arranges its children vertically and takes up the full height.
+Flex-grow on .container: By setting flex: 1 on .container, you ensure that it grows to fill the remaining space inside #root. 
+*/
+
+html,
+body,
+#root {
+  height: 100%;
+}
+
 body {
   font-family: cursive;
   padding: 0;
   margin: 0;
 }
 
+#root {
+  display: flex;
+  flex-direction: column;
+}
+
 .container {
-  height: 100vh;
+  flex: 1;
   padding: 8px;
 }
 

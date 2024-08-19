@@ -157,7 +157,7 @@ function BreathingTimer() {
                 {message}
             </h1>
             <div className="count">{count}</div>
-            <div className="round medium-font">Round {round}</div>
+            <div className="medium-font">Round {round}</div>
             <div className="medium-font">
                 <label>Breath length</label>
                 <input
@@ -170,14 +170,16 @@ function BreathingTimer() {
                     max="21"
                     step="0.1" />
             </div>
-            <button className="start"
-                disabled={disabled}
-                onClick={start}
-            >Start</button>
-            <button className="pause"
-                disabled={!disabled}
-                onClick={pause}
-            >Pause</button>
+            <div>
+                <button className="start"
+                    disabled={disabled}
+                    onClick={start}
+                >Start</button>
+                <button className="pause"
+                    disabled={!disabled}
+                    onClick={pause}
+                >Pause</button>
+            </div>
         </div>
     )
 }
