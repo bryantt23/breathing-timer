@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import './BreathingTimer.css'
 import { useSpeechSynthesis } from 'react-speech-kit'
 
@@ -24,6 +24,15 @@ function BreathingTimer() {
     const [breathMap, setBreathMap] = useState()
 
     const { speak, voices } = useSpeechSynthesis()
+    const intervalRef = useRef(null)
+
+    useEffect(() => {
+        return () => {
+            if (intervalRef.current) {
+                clearInterval(intervalRef.current)
+            }
+        }
+    }, [])
 
     useEffect(() => {
         localStorage.setItem("breath-length", breathLength)
@@ -46,6 +55,10 @@ function BreathingTimer() {
     useEffect(() => {
         switch (currentState) {
             case states.IDLE:
+                if (intervalRef.current) {
+                    clearInterval(intervalRef.current)
+                }
+                setDisabled(false)
                 break;
             case states.INHALE:
             case states.HOLD:
@@ -57,13 +70,13 @@ function BreathingTimer() {
                 handleSpeak('Congrats you rock!');
                 setMessage('Congrats you rock!');
                 setDisabled(false)
+                setRound(0)
                 break;
 
             default:
                 break;
         }
-    }, [currentState]
-    )
+    }, [currentState])
 
     function handleSpeak(text, rate = 0.75, voiceIndex = 2) {
         speak({
@@ -98,7 +111,16 @@ function BreathingTimer() {
             speech: 'out'
         });
         setBreathMap(map)
-        setRound(1)
+        if (round === 0) {
+            setRound(1)
+        }
+        else {
+            setCurrentState(states.INHALE)
+        }
+    }
+
+    function pause() {
+        setCurrentState(states.IDLE)
     }
 
     function countDown() {
@@ -112,11 +134,11 @@ function BreathingTimer() {
 
         let remainingTime = count * 1000;
 
-        const interval = setInterval(() => {
+        intervalRef.current = setInterval(() => {
             setCount((remainingTime / 1000).toFixed(1))
             remainingTime -= 100
             if (remainingTime < 0) {
-                clearInterval(interval);
+                clearInterval(intervalRef.current);
 
                 if (currentState === states.INHALE) {
                     setCurrentState(() => states.HOLD)
@@ -154,6 +176,10 @@ function BreathingTimer() {
                 disabled={disabled}
                 onClick={start}
             >Start</button>
+            <button className="start"
+                disabled={!disabled}
+                onClick={pause}
+            >Pause</button>
         </div>
     )
 }
