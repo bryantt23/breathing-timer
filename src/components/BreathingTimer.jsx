@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from 'react'
 import './BreathingTimer.css'
 import { useSpeechSynthesis } from 'react-speech-kit'
 
-const ROUNDS = 3;
+const ROUNDS = 10;
 const states = {
     IDLE: 'IDLE',
     INHALE: 'INHALE',
@@ -47,7 +47,6 @@ function BreathingTimer() {
             setCurrentState(states.COMPLETED)
             return;
         }
-        console.log(`Round ${round}`);
         handleSpeak(`Round ${round}`);
         setCurrentState(() => states.INHALE)
     }, [round])
@@ -66,14 +65,13 @@ function BreathingTimer() {
                 countDown()
                 break;
             case states.COMPLETED:
-                console.log('Congrats you rock!');
                 handleSpeak('Congrats you rock!');
                 setMessage('Congrats you rock!');
                 setDisabled(false)
                 setRound(0)
                 break;
-
             default:
+                console.error(`Unexpected state: ${currentState}`);
                 break;
         }
     }, [currentState])
@@ -124,9 +122,6 @@ function BreathingTimer() {
     }
 
     function countDown() {
-        console.log("🚀 ~ BreathingTimer ~ breathMap:", breathMap)
-        console.log(breathMap.get(currentState))
-        // debugger
         const { message, count, color, speech } = breathMap.get(currentState)
         setBackgroundColor(color)
         setMessage(message)
@@ -155,6 +150,9 @@ function BreathingTimer() {
 
     return (
         <div style={{ backgroundColor }} className='container'>
+            {
+                (currentState === states.IDLE && round > 0) && <div className='paused-overlay'>Paused</div>
+            }
             <h1 className="message">
                 {message}
             </h1>
