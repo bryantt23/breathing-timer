@@ -1,24 +1,13 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Document</title>
-    <link rel="stylesheet" type="text/css" href="styles.css" />
+    <title>Vite + React</title>
   </head>
   <body>
-    <div>
-      <h1 class="message">
-        Breathe in through the nose for 5 seconds, feel the stomach pushing out
-      </h1>
-      <div class="count">5</div>
-      <div class="round medium-font">Round 1</div>
-      <div class="medium-font">
-        <label>Breath length</label>
-        <input type="number" class="breath-length" value="5" min="4" max="21" step="0.1" />
-      </div>
-      <button class="start">Start</button>
-    </div>
-    <script src="script.js"></script>
+    <div id="root"></div>
+    <script type="module" src="/src/main.jsx"></script>
   </body>
 </html>

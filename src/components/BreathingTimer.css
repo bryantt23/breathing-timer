@@ -1,0 +1,115 @@
+/* Set the background color for the entire page */
+body {
+  font-family: cursive;
+  padding: 0;
+  margin: 0;
+}
+
+.container {
+  height: 100vh;
+  padding: 8px;
+}
+
+/* Style for the message text */
+.message {
+  font-size: 2rem; /* Example size, adjust as needed */
+  margin: 0.5rem;
+  margin-top: 0;
+}
+
+/* Style for the count number */
+.count {
+  font-size: 6rem; /* Large font size for the countdown number */
+  background-color: #fffe9b; /* Button color */
+  border: none;
+  border-radius: 50%; /* Circular button */
+  width: 150px; /* Example width */
+  height: 150px; /* Example height */
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  margin: 20px 0 20px 0.5rem;
+}
+
+/* Style for the round indicator, if needed */
+.medium-font {
+  font-size: 1.5rem;
+  margin: 0.5rem;
+}
+
+/* Style for the input, if it's visible */
+.breath-length {
+  font-size: 1.5rem;
+  margin: 0.5rem;
+  padding: 10px;
+  width: 50px;
+}
+.breath-length.disabled {
+  background-color: #e0e0e0; /* Greyed-out background */
+  color: #a9a9a9; /* Dimmed text color */
+  cursor: not-allowed; /* Cursor to indicate the input is disabled */
+}
+
+/* Additional styles for the start button */
+.start {
+  font-size: 1.5rem;
+  padding: 10px 20px;
+  margin: 0.5rem;
+  border-radius: 8px; /* Slightly rounded corners */
+  background-color: #90ee90;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Shadow for depth */
+}
+
+.start:hover {
+  background-color: #7cc47c; /* Slightly darker green on hover */
+}
+
+.start.disabled {
+  background-color: #d3d3d3; /* Greyed-out background */
+  color: #a9a9a9; /* Dimmed text color */
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+.pause {
+  font-size: 1.5rem;
+  padding: 10px 20px;
+  margin: 0.5rem;
+  border-radius: 8px;
+  background-color: #f9d342; /* Bright yellow background */
+  color: #4a4a4a; /* Dark text color for contrast */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Shadow for depth */
+  transition: background-color 0.3s ease, color 0.3s ease, opacity 0.3s ease;
+}
+
+.pause:hover {
+  background-color: #e6c233; /* Darker yellow on hover */
+}
+
+.pause.disabled {
+  background-color: #bfbfbf; /* Much more muted gray */
+  color: #6f6f6f; /* Even dimmer text color */
+  cursor: not-allowed;
+  pointer-events: none;
+  box-shadow: none; /* Remove the shadow for a flat appearance */
+  opacity: 0.5; /* Lower opacity to emphasize the disabled state */
+}
+
+/* Add an overlay when paused */
+.paused-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.3); /* Semi-transparent black */
+  pointer-events: none; /* Allow clicks to pass through */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: white;
+  font-size: 2rem;
+  z-index: 10; /* Ensure it overlays on top of everything */
+}
