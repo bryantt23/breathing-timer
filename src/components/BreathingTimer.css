@@ -24,6 +24,9 @@ body {
 .container {
   flex: 1;
   padding: 8px;
+  display: flex;
+  flex-direction: column;
+  position: relative; /* Ensure that the overlay is positioned relative to this container */
 }
 
 /* Style for the message text */
@@ -122,10 +125,26 @@ body {
   height: 100%;
   background-color: rgba(0, 0, 0, 0.3); /* Semi-transparent black */
   pointer-events: none; /* Allow clicks to pass through */
-  display: flex;
   justify-content: center;
   align-items: center;
   color: white;
-  font-size: 2rem;
+  font-size: 10rem;
   z-index: 10; /* Ensure it overlays on top of everything */
+  text-align: center;
+  text-transform: uppercase;
+  -webkit-text-stroke: 2px black; /* Outline for WebKit browsers */
+  text-shadow: 2px 2px 0 black, -2px 2px 0 black, 2px -2px 0 black,
+    -2px -2px 0 black; /* Outline with text-shadow */
+  width: 100vw; /* Make sure the text takes up the full width */
+}
+
+/* Hidden by default */
+.paused-overlay.hidden {
+  display: none;
+}
+
+/* Visible with flexbox */
+.paused-overlay.visible {
+  display: flex;
+  align-items: flex-start;
 }

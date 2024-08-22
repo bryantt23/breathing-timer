@@ -149,10 +149,12 @@ function BreathingTimer() {
     }
 
     return (
-        <div style={{ backgroundColor }} className='container'>
-            {
-                (currentState === states.IDLE && round > 0) && <div className='paused-overlay'>Paused</div>
-            }
+        <div style={{ backgroundColor }}
+            className={"container"}
+        >
+            <div className={`paused-overlay ${currentState === states.IDLE && round > 0 ? 'visible' : 'hidden'}`}>
+                Paused
+            </div>
             <h1 className="message">
                 {message}
             </h1>
