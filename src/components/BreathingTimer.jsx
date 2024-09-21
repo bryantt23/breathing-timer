@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from 'react'
 import './BreathingTimer.css'
 import { useSpeechSynthesis } from 'react-speech-kit'
 
-const ROUNDS = 10;
+const TARGET_ROUNDS = 10;
 const states = {
     IDLE: 'IDLE',
     INHALE: 'INHALE',
@@ -43,7 +43,7 @@ function BreathingTimer() {
         if (round === 0) {
             return
         }
-        if (round === ROUNDS) {
+        if (round > TARGET_ROUNDS) {
             setCurrentState(states.COMPLETED)
             return;
         }
